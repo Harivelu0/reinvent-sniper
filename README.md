@@ -117,6 +117,16 @@ When you press **Start live booking**, the app:
 - checks your real AWS schedule afterwards and **emails you what was booked**;
 - picks up where it left off if the app crashes (but not if you stop it on purpose).
 
+<img width="1912" height="977" alt="into" src="https://github.com/user-attachments/assets/d025f7c1-5c9b-46ba-9858-4a5abcb093d4" />
+<img width="497" height="917" alt="intro5" src="https://github.com/user-attachments/assets/2b52f3a3-b933-4781-a8ab-e7dbaa125cf4" />
+
+<img width="1290" height="630" alt="intro4" src="https://github.com/user-attachments/assets/92b01c5e-bbb4-494f-baff-0ca2fba01d1b" />
+<img width="873" height="435" alt="intro3" src="https://github.com/user-attachments/assets/e66518b9-7436-47f5-8d66-53fcc147d321" />
+<img width="1917" height="843" alt="intro2" src="https://github.com/user-attachments/assets/1b824f80-01f6-455e-9da3-05d12dac7fb4" />
+<img width="1182" height="541" alt="intro1" src="https://github.com/user-attachments/assets/c7669c50-1db5-40be-a8c0-61534f68d781" />
+<img width="1906" height="877" alt="intro6" src="https://github.com/user-attachments/assets/993c6c22-f575-4ac6-92fc-a3fb416d6a0b" />
+
+
 ## Booking-day checklist
 
 - [ ] Registered for re:Invent 2026, and signed in to the app.
@@ -239,3 +249,5 @@ test/                 tests
 ```
 
 </details>
+
+Build for me 😊

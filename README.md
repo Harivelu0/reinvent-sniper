@@ -182,7 +182,7 @@ When you press **Start live booking**, the app:
 
 - Built for the **re:Invent Catalog API Builder Challenge**, using the official AWS Events API. This is an independent project. It is **not affiliated with or endorsed by Amazon or AWS**.
 - The party list comes from the unofficial community site [conferenceparties.com](https://conferenceparties.com/reinvent2026/). That list belongs to its owner and is **not included in this repository**. Your copy is fetched by you, on your own computer, when you press the button.
-- Built by the author with the help of an AI coding assistant, working from the author's requirements and under their direction.
+- Build for me 😊
 
 ---
 
@@ -250,4 +250,3 @@ test/                 tests
 
 </details>
 
-Build for me 😊

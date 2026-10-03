@@ -1,0 +1,18 @@
+{
+  "name": "reinvent-sniper",
+  "version": "0.1.0",
+  "description": "Personal re:Invent 2026 session finder and auto-booker built on the AWS Events API",
+  "type": "module",
+  "private": true,
+  "scripts": {
+    "start": "node server.js",
+    "mock": "node mock/mock-events.js",
+    "test": "node --test test/shared.test.js test/auth-catalog.test.js test/booker.test.js"
+  },
+  "engines": {
+    "node": ">=20"
+  },
+  "dependencies": {
+    "nodemailer": "^10.0.13"
+  }
+}

@@ -1,0 +1,179 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Reinvent Sniper</title>
+<link rel="stylesheet" href="/style.css">
+</head>
+<body>
+<div class="wrap">
+  <header class="top">
+    <div class="brand">Reinvent Sniper<small>Find the right sessions. Book them the minute seats open.</small></div>
+    <nav class="tabs" role="tablist" aria-label="Screens">
+      <button role="tab" id="t-sessions" aria-selected="true" data-tab="sessions">Sessions</button>
+      <button role="tab" id="t-calendar" aria-selected="false" data-tab="calendar">Calendar</button>
+      <button role="tab" id="t-book" aria-selected="false" data-tab="book">Booking</button>
+      <button role="tab" id="t-profile" aria-selected="false" data-tab="profile">Profile</button>
+    </nav>
+    <div class="spacer"></div>
+    <div class="whoami" id="whoami"></div>
+  </header>
+
+  <div id="banner"></div>
+
+  <!-- SESSIONS -->
+  <section id="tab-sessions">
+    <div class="app">
+      <aside class="panel pad" aria-label="Filters">
+        <div class="rowsb"><h2 style="margin:0">Filters</h2><button class="clear" id="clearAll">Clear all</button></div>
+        <div id="filters"></div>
+      </aside>
+
+      <main class="panel" aria-label="Results">
+        <form class="ask" id="askForm">
+          <input id="askInput" type="text" placeholder="Search these results: e.g. AI agents, serverless cost, S3" aria-label="Search these results" autocomplete="off">
+          <button class="btn primary" type="submit">Search</button>
+        </form>
+        <div class="bar">
+          <span><strong id="count">0</strong> of <span id="total">0</span> sessions match your filters<span id="plannedNote" class="plannednote"></span></span>
+          <span class="spacer"></span>
+          <label id="matchWrap" hidden title="Search shows sessions that contain every word you typed, best first. Tick this to also see sessions that contain only some of them, below."><input type="checkbox" id="showPartial"> <span id="matchLabel">Also show partial matches</span></label>
+          <label title="Show a talk once and list its other times underneath"><input type="checkbox" id="groupRepeats" checked> Group repeats</label>
+          <span id="dismissWrap" hidden><label><input type="checkbox" id="showDismissed"> <span id="dismissLabel">Show hidden</span></label> <button class="clear" id="restoreAll">Bring all back</button></span>
+          <label>Sort <select id="sort"><option value="match">Best match</option><option value="time">Time</option><option value="seats">Seats left</option></select></label>
+        </div>
+        <div class="chips" id="chips"></div>
+        <div id="results"></div>
+        <div class="more" id="moreWrap" hidden><button class="btn" id="more">Show more</button></div>
+      </main>
+
+      <aside class="panel pad" aria-label="Plan board">
+        <h2>Plan board</h2>
+        <div id="plan"></div>
+        <p class="note">Backups may overlap a must-have on purpose. They are only booked if that must-have is full.</p>
+        <div class="rowwrap">
+          <button class="btn" id="favBtn">Save as Favorites</button>
+          <button class="btn primary" id="goCal">See calendar</button>
+          <button class="btn primary" id="goBook">Go to booking</button>
+        </div>
+        <p class="note" id="favMsg"></p>
+      </aside>
+    </div>
+  </section>
+
+  <!-- CALENDAR -->
+  <section id="tab-calendar" hidden>
+    <div class="panel pad">
+      <div class="rowsb"><h2 style="margin:0">Your week</h2><span class="hint" id="calSummary"></span></div>
+      <div id="calUntimed"></div>
+      <div id="calDetail" class="caldetail"></div>
+      <div class="calwrap"><div id="calGrid"></div></div>
+      <div class="legend" aria-label="Legend">
+        <span><i class="sw must"></i>Must-have</span><span><i class="sw nice"></i>Nice-to-have</span><span><i class="sw backup"></i>Backup</span>
+        <span><i class="sw party"></i>Party</span><span><i class="sw mine"></i>Your own</span><span><i class="sw clashsw"></i>Overlaps something</span>
+      </div>
+    </div>
+    <div class="calcols">
+      <div class="panel pad"><h2>Parties &amp; events</h2><div id="calParties"></div></div>
+      <div class="panel pad" id="calAdd"></div>
+    </div>
+  </section>
+
+  <!-- BOOKING -->
+  <section id="tab-book" hidden>
+    <div class="bookwrap">
+      <div class="banner warn" id="bkNote" hidden><div><b>Seats released on Oct 6 are booked on the AWS website, not here.</b> AWS opens reserved seating on Oct 6 on its own website and app, but through the API, which this app uses, only from <b>Oct 8</b>. To get seats from the first release, book those on the AWS site yourself. From Oct 8 this app books whatever is still open.</div></div>
+      <div class="panel pad hero">
+        <div class="herostate" id="bkState">Not started</div>
+        <div class="herotime" id="bkTime">--</div>
+        <p class="hint" id="bkWhen"></p>
+      </div>
+
+      <ol class="steps">
+        <li class="panel pad step"><div class="stepnum">1</div><div class="stepbody"><h3>Get ready</h3><ul class="check" id="checks"></ul></div></li>
+        <li class="panel pad step"><div class="stepnum">2</div><div class="stepbody"><h3>Try a practice run <span class="pill-note">recommended</span></h3>
+          <p class="hint">Shows which sessions would be booked, and in what order. It books nothing.</p>
+          <button class="btn" id="practiceBtn">Practice run</button></div></li>
+        <li class="panel pad step"><div class="stepnum">3</div><div class="stepbody"><h3>Start live booking</h3>
+          <p class="hint">Keep this window open. The app books your sessions the moment seats open, then emails you.</p>
+          <div class="rowwrap"><button class="btn primary big" id="liveBtn">Start live booking</button><button class="btn" id="stopBtn" disabled>Stop</button></div></div></li>
+      </ol>
+
+      <div class="panel pad"><h2 id="resultTitle">What was booked</h2><div id="rows"><span class="hint">Nothing yet.</span></div></div>
+
+      <details class="panel pad adv">
+        <summary>Advanced: booking times and activity log</summary>
+        <h3 class="advh">When booking opens</h3>
+        <p class="hint">AWS says reservations open through the API on Oct 8 but has not said the time, so the default is the earliest moment, the start of Oct 8 in Pacific time. Change it if AWS announces a time. If you add a second round, sessions that were full are tried again then. The app also keeps checking on its own, so a wrong time does not stop it.</p>
+        <div class="waves" id="waves"></div>
+        <div class="rowwrap" style="margin-top:8px"><button class="btn" id="saveWaves">Save times</button><button class="clear" id="resetWaves">Reset to the default</button></div>
+        <h3 class="advh">Activity</h3>
+        <div class="log" id="log" aria-live="polite"></div>
+      </details>
+    </div>
+  </section>
+
+  <!-- PROFILE -->
+  <section id="tab-profile" hidden>
+    <div class="pgrid">
+      <div class="panel pad">
+        <h2>What you care about</h2>
+        <p class="hint">Sessions with these words rank higher. Filters still decide what is shown.</p>
+        <div class="tagbox" id="likes"></div>
+        <form class="add" data-list="likes"><input type="text" placeholder="e.g. serverless" aria-label="Add interest"><button class="btn">Add</button></form>
+        <h2 style="margin-top:20px">What to push down</h2>
+        <div class="tagbox" id="skips"></div>
+        <form class="add" data-list="skips"><input type="text" placeholder="e.g. migration" aria-label="Add exclusion"><button class="btn">Add</button></form>
+        <h2 style="margin-top:20px">Catalog</h2>
+        <p class="hint" id="catInfo"></p>
+        <div class="rowwrap"><button class="btn" id="resync">Re-sync catalog</button><button class="btn" id="signout">Sign out</button></div>
+      </div>
+
+      <div class="panel pad fields">
+        <h2>Email me the booking report</h2>
+        <p class="hint">Fields marked <span class="req">*</span> are required. Without them, booking still works, but you will not get the email.</p>
+
+        <label for="smtpUser">Your email address <span class="req" title="Required">*</span></label>
+        <input id="smtpUser" type="email" required autocomplete="email" placeholder="name@gmail.com" aria-describedby="errUser">
+        <div class="fielderr" id="errUser" hidden></div>
+
+        <label for="smtpPass">App password <span class="req" title="Required">*</span> <span class="savedpill" id="passSaved" hidden>&#10003; Saved</span></label>
+        <input id="smtpPass" type="password" required autocomplete="new-password" placeholder="16 letters from Google" aria-describedby="errPass passHint">
+        <div class="fielderr" id="errPass" hidden></div>
+        <p class="hint" id="passHint">This is <b>not</b> your Gmail password. It is a one-time password that Google creates just for this app.</p>
+
+        <details class="help">
+          <summary>How do I get the app password?</summary>
+          <ol>
+            <li>Open <a href="https://myaccount.google.com/security" target="_blank" rel="noopener noreferrer">myaccount.google.com/security</a> and make sure <b>2-Step Verification</b> is turned on. Google requires this before it will make app passwords.</li>
+            <li>Open <a href="https://myaccount.google.com/apppasswords" target="_blank" rel="noopener noreferrer">myaccount.google.com/apppasswords</a>. Type a name such as <b>Reinvent Sniper</b> and click <b>Create</b>.</li>
+            <li>Google shows 16 letters in four groups, like <code>abcd efgh ijkl mnop</code>. Copy them and paste them above. The spaces do not matter.</li>
+            <li>That password can only send email for this app. You can delete it any time from the same Google page.</li>
+          </ol>
+          <p class="hint">Not using Gmail? Open <b>Advanced</b> below and enter your email provider's mail server, and use the password your provider gives for apps.</p>
+        </details>
+
+        <details class="help">
+          <summary>Advanced (usually not needed)</summary>
+          <label for="mailTo">Send reports to a different address</label>
+          <input id="mailTo" type="email" placeholder="Leave empty to send to your own address" aria-describedby="errTo">
+          <div class="fielderr" id="errTo" hidden></div>
+          <div class="two"><div><label for="smtpHost">Mail server</label><input id="smtpHost" type="text"></div><div><label for="smtpPort">Port</label><input id="smtpPort" type="text" inputmode="numeric"></div></div>
+          <p class="hint">Gmail uses smtp.gmail.com and port 465. The defaults are already set.</p>
+        </details>
+
+        <h2 style="margin-top:22px">Display</h2>
+        <label for="tz">Show times in</label>
+        <select id="tz"><option value="Asia/Kolkata">India (IST)</option><option value="America/Los_Angeles">Pacific (PT)</option><option value="local">This computer</option></select>
+
+        <div class="rowwrap" style="margin-top:16px"><button class="btn primary" id="saveSettings">Save</button><button class="btn" id="testMail">Save and send a test email</button></div>
+        <p class="hint" id="settingsMsg" role="status"></p>
+      </div>
+    </div>
+  </section>
+</div>
+<div id="toast" class="toast" role="status" aria-live="polite" hidden></div>
+<script type="module" src="/app.js"></script>
+</body>
+</html>
